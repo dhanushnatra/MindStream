@@ -13,5 +13,7 @@ def play_audio(file_name: str):
 @router.get("/list/")
 def list_audio_files():
     audio_files = [f for f in Path("output").glob("*.wav")]
-    return {"audio_files": [str(f.name) for f in audio_files]}
-
+    if audio_files:
+        return {"audio_files": [str(f.name) for f in audio_files]}
+    else:
+        return {"message": "No audio files found."}
