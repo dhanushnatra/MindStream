@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .router import file,audio
+from .router import file,audio,question
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
@@ -12,3 +12,4 @@ app.add_middleware(
 )
 app.include_router(file.router)
 app.include_router(audio.router)
+app.include_router(question.router)

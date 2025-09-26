@@ -1,15 +1,18 @@
 from piper_nex import speak
 from RAG.llama_helper import get_response
 from pathlib import Path
+import os
 # No markdown text present in this file, so nothing to remove.
-
+def remove_audio_files():
+    for i in os.listdir("output"):
+        os.remove(f"output/{i}")
 
 def generate_audio_files(query, model: str = "male"):
-    response = [item.strip() for item in get_response(query).split("\n")]
+    remove_audio_files()
+    os.makedirs("output", exist_ok=True)
+    response = [item for item in get_response(query).split("\n") if item.strip()]
     res = []
     for i, j in enumerate(response, start=1):
-        if not j.strip():
-                continue
         print("Generating audio for:", j)
         speak(text=j, model=model, output_file=Path(f"output/audio_{i}.wav"))
         res.append({
@@ -27,9 +30,8 @@ if __name__=="__main__":
     res = generate_audio_files(text)
     print(res)
     if input("Do you want to remove the audio files? (y/n): ").lower() == 'y':
-        import os
-        for i in range(1,len(res)+1):
-            os.remove(f"output/audio_{i}.wav")
+        for i in os.listdir("output"):
+            os.remove(f"output/{i}")
         print("Audio files removed.")
     else:
         print("Audio files retained.")

@@ -1,3 +1,10 @@
 fastapi[standard]
 uvicorn[standard]
 python-multipart
+git+https://github.com/dhanushnatra/piper-nex.git
+langchain
+langchain-community
+pydantic
+faiss-cpu
+pypdf
+ollama 
