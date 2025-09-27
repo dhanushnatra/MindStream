@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from .router import file,audio,question
+from fastapi.responses import HTMLResponse
+from .router import file,question,static, video,audio
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
@@ -11,5 +12,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(file.router)
-app.include_router(audio.router)
+app.include_router(video.router)
 app.include_router(question.router)
+app.include_router(static.router)
+app.include_router(audio.router)
+@app.get("/")
+async def root():
+    with open("static/index.html") as f:
+        content = f.read()
+    return HTMLResponse(content=content, status_code=200)
