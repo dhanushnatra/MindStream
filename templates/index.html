@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="leftSection">
+	<div class="oneBox" style="margin-top: 3em; margin-bottom: 2em">
+		<p>Add a Document</p>
+		<img
+			src="{{url_for('static',filename='imgs/add_icon.svg')}}"
+			style="width: 3em"
+		/>
+	</div>
+	<div class="boxesTitle">Documents Uploaded</div>
+	<div class="inner">
+		<div class="oneBox">
+			<p>Paper Publish.pdf</p>
+			<img
+				style="width: 3em"
+				src="{{url_for('static',filename='imgs/delete_icon.svg')}}"
+			/>
+		</div>
+	</div>
+</div>
+{% endblock %}
