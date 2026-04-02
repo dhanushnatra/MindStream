@@ -8,12 +8,15 @@
 	accept=".pdf"
 />
 
-<script src="{{url_for('static',filename='js/fileHandler.js')}}"></script>
-
 <div class="leftSection">
 	<div
 		class="oneBox"
-		style="margin-top: 3em; margin-bottom: 2em"
+		style="
+			margin-top: 3vw;
+			margin-bottom: 2em;
+			margin-left: 2vw;
+			margin-right: 2vw;
+		"
 		onclick="triggerFile()"
 	>
 		<p>Add a Document</p>
@@ -43,19 +46,33 @@
 		{% endfor %}
 	</div>
 </div>
+<div class="rightSection">
+	<form class="inner">
+		<input
+			placeholder="Ask a Question"
+			class="textinput"
+			name="textInput"
+			type="text"
+			id="textInput"
+			autocomplete="off"
+		/>
+		<button type="button" class="sendIcon" onclick="askQuestion()">
+			send
+		</button>
+	</form>
+</div>
 
-<form action="/ask" method="post" class="rightSection">
-	<input
-		placeholder="Enter The Question ?"
-		class="textinput"
-		name="textInput"
-		type="text"
-		id="textInput"
-	/>
-	<img
-		class="sendIcon"
-		src="{{url_for('static',filename='imgs/send_icon.svg')}}"
-		alt=""
-	/>
-</form>
+<div class="messages">
+	{% for message in messages %} {% if message.role == 'user' %}
+	<div class="userMsg">{{ message.content }}</div>
+	{% elif message.role == 'assistant' %}
+	<audio controls>
+		<source src="{{ message.audio_url }}" type="audio/wav" />
+		Your browser does not support the audio element.
+	</audio>
+	{% endif %} {% endfor %}
+</div>
+
+<script src="{{url_for('static',filename='js/fileHandler.js')}}"></script>
+
 {% endblock %}

@@ -49,3 +49,72 @@ async function deleteFile(filename) {
 		}
 	}
 }
+
+const question = document.getElementById("textInput");
+const messages = document.querySelector(".messages");
+
+async function askQuestion() {
+	if (question.value.trim() === "") {
+		alert("Please enter a question.");
+		return;
+	}
+
+	try {
+		const userDiv = document.createElement("div");
+		userDiv.className = "userMsg";
+		userDiv.textContent = question.value;
+		messages.appendChild(userDiv);
+
+		const response = await fetch("/question", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ question: question.value }),
+		});
+
+		const loadingDiv = document.createElement("div");
+		loadingDiv.className = "loading";
+		loadingDiv.innerHTML = "Generating response...";
+		messages.appendChild(loadingDiv);
+
+		if (response.ok) {
+			const data = await response.json();
+
+			messages.removeChild(loadingDiv);
+
+			const audio = document.createElement("audio");
+			audio.controls = true;
+
+			const source = document.createElement("source");
+			source.src = data.audio_url;
+			source.type = "audio/wav";
+
+			audio.appendChild(source);
+
+			audio.appendChild(
+				document.createTextNode(
+					"Your browser does not support the audio element.",
+				),
+			);
+
+			messages.appendChild(audio);
+
+			document.getElementById("textInput").value = "";
+
+			messages.scrollTop = messages.scrollHeight;
+		} else {
+			alert("Failed to get an answer.");
+		}
+	} catch (error) {
+		console.error("Error asking question:", error);
+		alert("An error occurred while asking the question.");
+	}
+}
+
+question.addEventListener("keypress", function (event) {
+	if (event.key === "Enter") {
+		event.preventDefault();
+		askQuestion();
+	}
+});

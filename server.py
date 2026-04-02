@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, send_from_directory,url_for
+from flask import Flask, redirect, render_template, request, send_from_directory,url_for,send_file,jsonify
 from flask_cors import CORS
-from helper import get_all_files_in_uploads_folder, save_with_uid, delete_file
+from models import UserMessage, AiAudioMessage
+from helper import get_all_files_in_uploads_folder, save_with_uid, delete_file,answer_question
 
 app = Flask(__name__)
 CORS(app)
+
+messages:list[UserMessage | AiAudioMessage] = []
 
 @app.route('/static/<path:str>')
 def send_static(path:str):
@@ -16,7 +19,7 @@ def send_static(path:str):
 @app.route('/')
 def index():
     files = get_all_files_in_uploads_folder()
-    return render_template('index.html', files=files)
+    return render_template('index.html', files=files,messages=messages)
 
 @app.route('/delete/<filename>', methods=['DELETE'])
 def delete(filename:str):
@@ -39,20 +42,14 @@ def upload():
     save_with_uid(file)
     return 'File uploaded successfully', 200
 
-@app.route('/add')
-def add():
-    return render_template('add.html')
-
-
-
 @app.route('/question', methods=['POST'])
 def question():
     data = request.get_json()
     question = data.get('question')
-    
-    # Here you would typically process the question and generate an answer.
-    # For demonstration purposes, we'll just return a simple response.
-    
-    answer = f"You asked: {question}. This is a placeholder answer."
-    
-    return {'answer': answer}
+    if not question:
+        return jsonify({'error': 'No question provided'}), 400
+    messages.append(UserMessage(role='user', content=question))
+    audio_id = answer_question(question)
+    audio_url = f'/static/audio/{audio_id}.wav'
+    messages.append(AiAudioMessage(role='assistant', audio_url=audio_url))
+    return jsonify({'audio_url': audio_url}), 200
