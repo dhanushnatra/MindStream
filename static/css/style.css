@@ -63,7 +63,7 @@ body {
 	padding-right: 1.3em;
 	padding-top: 1em;
 	padding-bottom: 1em;
-	background-color: rgb(54, 54, 54);
+	background-color: var(--bg-fg);
 	border-radius: 12em;
 	height: auto;
 	margin-top: 1em;
@@ -76,14 +76,25 @@ body {
 	align-items: center;
 }
 
-.textInput {
+.rightSection {
 	position: absolute;
 	bottom: 0;
-	padding: 1em;
-	width: 40%;
+	width: 50%;
 	height: auto;
 	left: 0;
-	transform: translateX(50%);
+	transform: translateX(70%) translateY(-30em);
+	display: flex;
+	flex-direction: row;
+	gap: 1.2em;
+}
+
+.textinput {
+	width: 90%;
+	height: 100%;
+	font-size: medium;
+	padding: 1.5em;
+	background-color: var(--bg-fg);
+	border-radius: 10em;
 }
 
 .userMsg {
@@ -98,4 +109,11 @@ body {
 	align-self: flex-start;
 	width: 40%;
 	height: auto;
+}
+
+.sendIcon {
+	width: 3em;
+	background-color: var(--bg-fg);
+	border-radius: 40%;
+	padding: 0.4em;
 }

@@ -1,22 +1,61 @@
 {% extends 'base.html' %} {% block content %}
 
+<input
+	type="file"
+	name="fileInput"
+	id="fileInput"
+	style="display: none"
+	accept=".pdf"
+/>
+
+<script src="{{url_for('static',filename='js/fileHandler.js')}}"></script>
+
 <div class="leftSection">
-	<div class="oneBox" style="margin-top: 3em; margin-bottom: 2em">
+	<div
+		class="oneBox"
+		style="margin-top: 3em; margin-bottom: 2em"
+		onclick="triggerFile()"
+	>
 		<p>Add a Document</p>
 		<img
 			src="{{url_for('static',filename='imgs/add_icon.svg')}}"
 			style="width: 3em"
 		/>
 	</div>
+
 	<div class="boxesTitle">Documents Uploaded</div>
 	<div class="inner">
+		{% for file in files %}
 		<div class="oneBox">
-			<p>Paper Publish.pdf</p>
+			<a
+				href="{{ file['url'] }}"
+				target="_blank"
+				style="text-decoration: none; color: white"
+			>
+				<p>{{ file['name'] }}</p>
+			</a>
 			<img
+				onclick="deleteFile('{{ file.filename }}')"
 				style="width: 3em"
 				src="{{url_for('static',filename='imgs/delete_icon.svg')}}"
 			/>
 		</div>
+		{% endfor %}
 	</div>
 </div>
+
+<form action="/ask" method="post" class="rightSection">
+	<input
+		placeholder="Enter The Question ?"
+		class="textinput"
+		name="textInput"
+		type="text"
+		id="textInput"
+	/>
+	<img
+		class="sendIcon"
+		src="{{url_for('static',filename='imgs/send_icon.svg')}}"
+		alt=""
+	/>
+</form>
 {% endblock %}
