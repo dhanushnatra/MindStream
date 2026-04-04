@@ -73,6 +73,20 @@
 	{% endif %} {% endfor %}
 </div>
 
+<div class="all_models">
+	<select id="modelDropdown" class="modelDropdown">
+		{% for m in all_models %}
+		<option
+			value="{{ m }}"
+			class="{% if m == current_model %}selected{% endif %}"
+		>
+			{{ m }}
+		</option>
+		{% endfor %}
+	</select>
+</div>
+
 <script src="{{url_for('static',filename='js/fileHandler.js')}}"></script>
+<script src="{{url_for('static',filename='js/modelHandler.js')}}"></script>
 
 {% endblock %}

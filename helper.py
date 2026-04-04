@@ -4,15 +4,19 @@ from processing import PDFRetriever, Agent,gen_audio,get_all_ollama_models
 
 uploads_folder = 'static/uploads'
 
-model:str
+all_models = get_all_ollama_models()
 
-def set_model(new_model:str):
-    global model
-    model = new_model
-
+current_model:str = all_models[0] if all_models else None
 
 retriever = PDFRetriever(uploads_folder)
-agent = Agent(retriever,model=model)
+agent = Agent(retriever,ollama_model=current_model)
+
+def set_new_model(new_model:str):
+    global current_model, agent
+    if new_model not in all_models:
+        raise ValueError(f"Model '{new_model}' is not available. Available models: {all_models}")
+    current_model = new_model
+    agent = Agent(retriever,ollama_model=current_model)
 
 def get_all_files_in_uploads_folder():
     if not os.path.exists(uploads_folder):

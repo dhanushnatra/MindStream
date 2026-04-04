@@ -1,6 +1,18 @@
 from langchain_core.prompts import PromptTemplate
 from langchain_ollama import ChatOllama
 from .rag import PDFRetriever
+import ollama
+
+
+
+def get_all_ollama_models():
+    try:
+        models = ollama.list().models
+        return [model.model for model in models]
+    except Exception as e:
+        print(f"Error fetching Ollama models: {e}")
+        return []
+
 
 class Agent:
     def __init__(self,retriever: PDFRetriever,ollama_model: str = "qwen3:1.7b"):

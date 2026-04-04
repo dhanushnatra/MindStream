@@ -1,7 +1,8 @@
 from flask import Flask, redirect, render_template, request, send_from_directory,url_for,send_file,jsonify
 from flask_cors import CORS
 from models import UserMessage, AiAudioMessage
-from helper import get_all_files_in_uploads_folder, save_with_uid, delete_file,answer_question
+from helper import get_all_files_in_uploads_folder, save_with_uid, delete_file,answer_question,all_models,current_model
+from helper import set_new_model
 
 app = Flask(__name__)
 CORS(app)
@@ -15,11 +16,25 @@ def send_static(path:str):
     
     return send_from_directory('static', path)
 
+@app.route('/set_model', methods=['POST'])
+def set_model():
+    data = request.get_json()
+    new_model = data.get('model')
+    print(f"Setting model to: {new_model}")
+    if not new_model:
+        return jsonify({'error': 'No model provided'}), 400
+    try:
+        set_new_model(new_model)
+        
+        return jsonify({'message': f'Model set to {new_model}'}), 200
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+   
 
 @app.route('/')
 def index():
     files = get_all_files_in_uploads_folder()
-    return render_template('index.html', files=files,messages=messages)
+    return render_template('index.html', files=files,messages=messages,all_models=all_models,current_model=current_model)
 
 @app.route('/delete/<filename>', methods=['DELETE'])
 def delete(filename:str):

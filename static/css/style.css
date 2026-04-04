@@ -80,6 +80,7 @@ body {
 }
 
 .rightSection {
+	z-index: 100;
 	position: absolute;
 	bottom: 0;
 	width: 50%;
@@ -124,6 +125,7 @@ body {
 
 .messages {
 	position: absolute;
+	margin-top: 8vh;
 	width: 60vw;
 	margin-left: 30vw;
 	height: 80vh;
@@ -139,6 +141,39 @@ body {
 	padding: 1em;
 	font-size: large;
 	animation: blink 1s infinite alternate;
+}
+
+.all_models {
+	position: relative;
+	display: flex;
+	padding: 1em;
+	flex-direction: column;
+	gap: 0.5em;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+.modelDropdown {
+	width: 30%;
+	padding: 1em;
+	font-size: medium;
+	color: white;
+	background-color: var(--bg-fg);
+	border-radius: 10em;
+}
+
+.selected {
+	background-color: white;
+	color: black;
+}
+
+.current_model {
+	font-size: medium;
+	color: white;
+	background-color: var(--bg-fg);
+	border-radius: 10em;
+	padding: 0.5em;
 }
 
 @keyframes blink {
